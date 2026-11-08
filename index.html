@@ -137,11 +137,11 @@ nav .btn{padding:10px 20px;min-height:44px;margin-left:6px;color:#03111f}
 .drawing .tip{fill:#f0f9ff;filter:url(#tipGlow)}
 .slogan-box{width:min(980px,calc(100% - 32px));text-align:center;margin-top:clamp(4px,2vh,22px);will-change:opacity,transform}
 .slogan{font-size:clamp(1.85rem,6.4vw,4.4rem);line-height:1.06;letter-spacing:-.02em;text-wrap:balance}
-.slogan .w{display:inline-block;opacity:0;transform:translateY(.45em);filter:blur(8px);transition:opacity .65s var(--ease),transform .7s var(--ease),filter .65s var(--ease);transition-delay:calc(var(--i) * 45ms)}
+.slogan .w{display:inline-block;opacity:0;transform:translateY(.45em);filter:blur(8px);transition:opacity .33s var(--ease),transform .35s var(--ease),filter .33s var(--ease);transition-delay:calc(var(--i) * 22ms)}
 .slogan.in .w{opacity:1;transform:none;filter:none}
 .slogan-sub{color:var(--ink-2);margin:16px auto 0;max-width:54ch;font-size:clamp(.98rem,1.7vw,1.12rem)}
 .hero-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:22px}
-.fade-step{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.fade-step{opacity:0;transform:translateY(22px);transition:opacity .3s var(--ease),transform .3s var(--ease)}
 .fade-step.in{opacity:1;transform:none}
 .scroll-hint{position:absolute;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);transition:opacity .4s}
 .scroll-hint i{width:22px;height:36px;border:1.5px solid rgba(186,230,253,.4);border-radius:12px;position:relative}
@@ -333,8 +333,8 @@ form .btn{width:100%}
 .houses{position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none;z-index:0}
 .house{position:absolute;opacity:0;color:var(--c);animation:houseLife var(--t) ease-in-out forwards;filter:drop-shadow(0 0 4px currentColor)}
 .house svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.house path{stroke-dasharray:1 1;animation:draw .45s ease-out both;animation-delay:var(--d)}
-.house path.f{fill:currentColor;fill-opacity:0;animation:draw .45s ease-out both,fillIn .6s ease-out both;animation-delay:var(--d),calc(var(--d) + .35s)}
+.house path{stroke-dasharray:1 1;animation:draw .23s ease-out both;animation-delay:var(--d)}
+.house path.f{fill:currentColor;fill-opacity:0;animation:draw .23s ease-out both,fillIn .3s ease-out both;animation-delay:var(--d),calc(var(--d) + .18s)}
 @keyframes draw{0%{stroke-dashoffset:1;opacity:0}1%{opacity:1}100%{stroke-dashoffset:0;opacity:1}}
 @keyframes fillIn{from{fill-opacity:0}to{fill-opacity:.09}}
 @keyframes houseLife{0%{opacity:0}5%{opacity:var(--o)}78%{opacity:var(--o)}100%{opacity:0}}
@@ -342,7 +342,7 @@ form .btn{width:100%}
 /* =========================================================
    10. Reveal (Fade-In beim Scrollen)
    ========================================================= */
-.reveal{opacity:0;transform:translateY(36px);filter:blur(6px);transition:opacity .65s var(--ease),transform .65s var(--ease),filter .65s var(--ease);transition-delay:var(--d,0s)}
+.reveal{opacity:0;transform:translateY(36px);filter:blur(6px);transition:opacity .33s var(--ease),transform .33s var(--ease),filter .33s var(--ease);transition-delay:calc(var(--d,0s) / 2)}
 .reveal.left{transform:translateX(-40px)}.reveal.right{transform:translateX(40px)}.reveal.zoom{transform:scale(.95)}
 .reveal.in{opacity:1;transform:none;filter:none}
 
@@ -790,7 +790,7 @@ var slogan=$("#slogan"),wi=0;
   var NS="http://www.w3.org/2000/svg";
   var svg=$("#drawing"),gGlow=$("#gGlow"),gCore=$("#gCore"),tip=$("#tip");
   var stage=$("#hero"),box=$("#sloganBox"),sub=$("#sloganSub"),acts=$("#heroActions"),hint=$("#scrollHint");
-  var DUR_PEOPLE=5500, DUR_HOUSE=4500, PAUSE=250;   /* Zeichentempo (ms) */
+  var DUR_PEOPLE=2750, DUR_HOUSE=2250, PAUSE=120;   /* Zeichentempo (ms) */
   var segs=[];
 
   function mk(d,parent){var p=document.createElementNS(NS,"path");p.setAttribute("d",d);parent.appendChild(p);return p}
@@ -852,7 +852,7 @@ var slogan=$("#slogan"),wi=0;
     /* Abbau: zwischen 3 % und 70 % des Hero-Scrollwegs – gut sichtbar, da die Bühne "klebt" */
     var keep=1-smooth(.03,.7,s);
     var target=Math.min(auto,keep);
-    cur+=(target-cur)*.15;
+    cur+=(target-cur)*.28;
     if(Math.abs(target-cur)<.0004)cur=target;
     render(cur);
 
@@ -873,7 +873,7 @@ var slogan=$("#slogan"),wi=0;
     new IntersectionObserver(function(es){inView=es[0].isIntersecting;if(inView)start()},{threshold:0}).observe(stage);
   }
   render(0);
-  setTimeout(start,250);
+  setTimeout(start,120);
 })();
 
 /* ===== Hintergrund: weiche Lichtpartikel (Bokeh) + Zeiger-Licht ===== */
@@ -967,11 +967,11 @@ var slogan=$("#slogan"),wi=0;
       if(!collision)placed=true;
     }
     if(!placed)return;
-    var el=document.createElement("div"),parts=pick(HOUSES),step=rnd(.18,.26),svg="";
+    var el=document.createElement("div"),parts=pick(HOUSES),step=rnd(.09,.13),svg="";
     parts.forEach(function(p,i){svg+='<path d="'+p[0]+'" pathLength="1"'+(p[1]?' class="f"':'')+' style="--d:'+(i*step).toFixed(2)+'s"/>'});
     el.className="house";
     el.style.cssText="left:"+x.toFixed(0)+"px;top:"+y.toFixed(0)+"px;width:"+sz.toFixed(0)+"px;height:"+sz.toFixed(0)+"px;"
-      +"--c:"+pick(COLORS)+";--o:"+rnd(.16,.28).toFixed(2)+";--t:"+(parts.length*step+3).toFixed(1)+"s";
+      +"--c:"+pick(COLORS)+";--o:"+rnd(.16,.28).toFixed(2)+";--t:"+(parts.length*step+1.5).toFixed(1)+"s";
     el.innerHTML='<svg viewBox="0 0 64 64">'+svg+'</svg>';
     el.addEventListener("animationend",function(e){if(e.target===el)el.remove()});
     layer.appendChild(el);
